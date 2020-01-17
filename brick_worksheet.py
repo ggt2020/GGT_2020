@@ -42,10 +42,21 @@ class Ball(Circle):
 
     def hit_racket(self, game):
         # check if the ball hits the racket
-        if self.get_center()[1] - self.get_radius() <= game.racket_pos_y + game.racket_height:
-            if (self.get_center()[0] >= game.racket.get_x() - game.racket_width/2) and self.get_center()[0] <= game.racket.get_x() + game.racket_width/2:
-                return True
-        return False
+        if self.speed[1] < -1:
+            ball_bottom = self.get_center()[1] - self.get_radius()
+            racket_bottom = game.racket.get_y()
+            racket_top = racket_bottom + game.racket.get_height()
+        
+            if ball_bottom >= racket_bottom and ball_bottom <= racket_top:
+                ball_right = self.get_center()[0] + self.get_radius()
+                ball_left = self.get_center()[0] - self.get_radius()
+                
+                racket_left = game.racket.get_x()
+                racket_right = game.racket.get_x() + game.racket_width
+                
+                if ball_right >= racket_left and ball_left <= racket_right:
+                    return True
+            return False
         
     def hit_bottom(self, game):
         # check if the ball hits the bottom
